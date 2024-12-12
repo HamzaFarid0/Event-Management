@@ -1,0 +1,208 @@
+<div class="w-4/5 lg:container pl-0 p-6 sm:pl-6">
+  <h1 class="text-3xl text-gray-800 text-center mb-6 font-bold font-serif">{{role==='Admin' ? 'Manage Events' : 'Upcoming events'}}</h1>
+  <!-- Grid Layout for Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 gap-6">
+    <!-- Card Template -->
+    <div *ngFor="let event of eventsData$ | async"
+      class="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+      <!-- Event Image -->
+      <img 
+        class="w-full h-40 object-cover" 
+        [src]="event.image"
+        alt="Event Image" />
+
+      <!-- Event Content -->
+      <div class="p-4">
+        <!-- Title -->
+        <h2 class="text-xl font-semibold text-gray-800 mb-2 text-center font-serif">{{ event.title }}</h2>
+        
+        <!-- Date and Time -->
+        <p class="text-sm text-gray-600">
+          <span class="font-medium">Date:</span> {{ event.date }}
+        </p>
+        <p class="text-sm text-gray-600">
+          <span class="font-medium">Time:</span> {{ event.time }}
+        </p>
+        
+        <!-- Location -->
+        <p class="text-sm text-gray-600 ">
+          <span class="font-medium">Location:</span> {{ event.location }}
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div *ngIf="role==='Admin'" class="p-4 gap-x-1 border-t border-gray-200 flex justify-between">
+        <button (click)="showPopup(event)" class="px-3 py-1 bg-blue-500 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-600">
+          Edit
+        </button>
+        <button (click)="openInviteModal(event)"   class="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-md shadow-sm hover:bg-green-600">
+          Invite Guests
+        </button>
+        <button (click)="deleteEvent(event.id)" class="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded-md shadow-sm hover:bg-red-600">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup Modal -->
+<div *ngIf="isPopupVisible" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6">
+    <h2 class="text-xl font-bold text-center mb-4">Edit Event</h2>
+    
+    <form #eventForm="ngForm" (ngSubmit)="updateEvent()">
+      <!-- Title Field -->
+      <div class="mb-4">
+        <label for="eventTitle" class="block text-sm font-medium text-gray-700">Title</label>
+        <input 
+          id="eventTitle"
+          type="text" 
+          class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="title" 
+          [(ngModel)]="event.title"
+          required
+        />
+      </div>
+    
+      <!-- Date Field -->
+      <div class="mb-4">
+        <label for="eventDate" class="block text-sm font-medium text-gray-700">Date</label>
+        <input 
+          id="eventDate"
+          type="date" 
+          class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="date" 
+          [(ngModel)]="event.date"
+          required
+        />
+      </div>
+    
+      <!-- Time Field -->
+      <div class="mb-4">
+        <label for="eventTime" class="block text-sm font-medium text-gray-700">Time</label>
+        <input 
+          id="eventTime"
+          type="time" 
+          class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="time" 
+          [(ngModel)]="event.time"
+          required
+        />
+      </div>
+
+      <!-- Location Field -->
+      <div class="mb-4">
+        <label for="eventLocation" class="block text-sm font-medium text-gray-700">Location</label>
+        <input 
+          id="eventLocation"
+          type="text" 
+          class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="location" 
+          [(ngModel)]="event.location"
+          required
+        />
+      </div>
+    
+      <!-- Image Field -->
+      <div class="mb-4">
+        <label for="eventImage" class="block text-sm font-medium text-gray-700">Image</label>
+        <input 
+          id="eventImage"
+          type="file" 
+          class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          (change)="onImageUpload($event)"
+          name="image"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-right flex gap-8 justify-end">
+        <button 
+          type="submit" 
+          class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          [disabled]="eventForm.invalid"
+        >
+          Update Event
+        </button>
+        <button 
+          type="button" 
+          class=" px-6 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
+          (click)="hidePopup()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+<!-- Invite Guests Modal -->
+
+
+
+<div *ngIf="isInviteModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-10 z-50 overflow-y-auto">
+  <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 p-6 max-h-screen overflow-y-auto">
+    <h2 class="text-xl font-bold text-center mb-4 font-serif">
+      Invite Guests for {{ selectedEvent?.title }}
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 font-serif">#</th>
+            <th class="border border-gray-300 px-4 py-2 font-serif">Username</th>
+            <th class="border border-gray-300 px-4 py-2 font-serif">Invitation Status</th>
+            <th class="border border-gray-300 px-4 py-2 font-serif">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of enrichedUsers; index as i">
+            <td class="border text-center border-gray-300 px-4 py-2 font-serif">{{ i + 1 }}</td>
+            <td class="border text-center border-gray-300 px-4 py-2 font-serif">{{ user.username }}</td>
+            <td class="border text-center border-gray-300 px-4 py-2">
+              <span
+                class="rounded-2xl px-2 py-0 font-serif" 
+                [ngClass]="{
+                  'bg-purple-100 text-purple-800': user.status === 'Uninvited',
+                  'bg-yellow-100 text-yellow-800': user.status === 'Pending',
+                  'bg-green-100 text-green-800': user.status === 'Accepted',
+                  'bg-red-100 text-red-800': user.status === 'Rejected'
+                }"
+              >
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="border text-center border-gray-300 px-4 py-2">
+              <button
+                class="px-2 py-1 rounded-lg text-white font-serif"
+                [ngClass]="{
+                  'bg-green-500 hover:bg-green-600': !user.invited,
+                  'bg-red-500 hover:bg-red-600': user.invited
+                }"
+                (click)="sendInvite(user, selectedEvent.id)"
+              >
+                {{ user.invited ? 'Cancel Invite' : 'Send Invite' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-right mt-4">
+      <button 
+        class="px-6 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
+        (click)="closeInviteModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+

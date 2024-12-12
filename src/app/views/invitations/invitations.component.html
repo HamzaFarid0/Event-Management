@@ -1,0 +1,76 @@
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1">
+
+    <div class="container mr-auto p-6 mt-6 pl-0">
+      <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4 font-serif">Event Invitations</h2>
+      <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table class="min-w-full text-left text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">#</th>
+              <th class="px-4 py-3 text-gray-9 font-m00 font-semibold font-serif">Title</th>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">Date</th>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">Time</th>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">Location</th>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">Invitation Status</th>
+              <th class="px-4 py-3 text-gray-900 font-semibold font-serif">Actions</th>
+            </tr>
+          </thead>
+          <tbody   *ngFor="let invite of invitations, let i=index" class="divide-y divide-gray-200">
+            <!-- Row 1 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-medium text-gray-600">{{i+1}}</td>
+              <td class="px-4 py-3 font-medium text-gray-600">{{invite.eventData.title}}</td>
+              <td class="px-4 py-3 font-medium text-gray-600">{{invite.eventData.date}}</td>
+              <td class="px-4 py-3 font-medium text-gray-600">{{invite.eventData.time}}</td>
+              <td class="px-4 py-3 font-medium text-gray-600">{{invite.eventData.location}}</td>
+              <td class="px-4 py-3 font-medium">
+              
+                  <span
+                  class="rounded-2xl px-2 py-0 font-medium" 
+                  [ngClass]="{
+
+                    'bg-yellow-100   text-yellow-800': invite.inviteData.status === 'Pending',
+                    'bg-green-100   text-green-800': invite.inviteData.status === 'Accepted',
+                    'bg-red-100  text-red-800': invite.inviteData.status === 'Rejected'
+                  }"
+                  >
+                 {{invite.inviteData.status}}
+                </span>
+              </td>
+              <td class="flex px-4 py-3 gap-3">
+                <button 
+                (click)="updateInviteStatus(invite.eventId ,invite.inviteData.userId, 'Accepted' )"
+                class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition font-serif">
+                  Accept
+                </button>
+                <button 
+                (click)="updateInviteStatus(invite.eventId ,invite.inviteData.userId, 'Rejected')"
+                class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition font-serif">
+                  Reject
+                </button>
+              </td>
+            </tr>
+
+        
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    
+  </div>
+</div>
+
+
+
+
+
+
+

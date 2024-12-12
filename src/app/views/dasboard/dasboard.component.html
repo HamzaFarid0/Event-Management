@@ -1,0 +1,36 @@
+<div class="flex">
+    <div class="">
+ <app-sidebar></app-sidebar>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h2 class="font-bold text-3xl text-center pt-16 font-serif">Welcome Back Admin</h2>
+      <div class="grid grid-cols-2 lg:grid-cols-3 max-w-4xl mr-4 gap-4 pt-8 lg:ml-28 lg:gap-x-10">
+        <div class="p-4 bg-blue-50  shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Total Events</h3>
+          <p class="text-2xl font-semibold text-center text-blue-600 font-serif">{{totalEvents}}</p>
+        </div>
+        <div class="p-4 bg-purple-50 shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Total Users</h3>
+          <p class="text-2xl font-semibold text-center text-green-600 font-serif">{{totalUsers}}</p>
+        </div>
+        <div class="p-4 bg-yellow-50 shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Guests Invited</h3>
+          <p class="text-2xl font-semibold text-center text-yellow-600 font-serif">{{invitationStats?.totalInvited}}</p>
+        </div>
+        <div class="p-4 bg-red-50 shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Pending Invitations</h3>
+          <p class="text-2xl font-semibold text-center text-red-600 font-serif">{{invitationStats?.totalPending}}</p>
+        </div>
+        <div class="p-4 bg-green-100 shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Accepted Invitations</h3>
+          <p class="text-2xl font-semibold text-center text-purple-600 font-serif">{{invitationStats?.totalAccepted}}</p>
+        </div>
+        <div class="p-4 bg-orange-50 shadow rounded">
+          <h3 class="text-gray-700 text-center break-words font-bold font-serif">Rejected Invitations</h3>
+          <p class="text-2xl font-semibold text-center text-orange-700 font-serif">{{invitationStats?.totalRejected}}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  

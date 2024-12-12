@@ -1,0 +1,40 @@
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
+  
+    <!-- Main Content -->
+    <div class="flex-1 ">
+ 
+
+<div class="container mr-auto p-6 mt-8 pl-0 ">
+  <h2 class="text-2xl text-center font-bold font-serif text-gray-800 mb-4">Users List</h2>
+  <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+    <table class="min-w-full text-left text-sm ">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-3  font-semibold font-serif">#</th>
+          <th class="px-4 py-3  font-semibold font-serif">Username</th>
+          <th class="px-4 py-3  font-semibold font-serif">Email</th>
+        </tr>
+      </thead>
+      <tbody  class="divide-y divide-gray-200">
+        <tr *ngFor="let user of users, let i = index" class="hover:bg-gray-50">
+          <td class="px-4 py-3 text-gray-700 font-serif">{{i+1}}</td>
+          <td class="px-4 py-3 text-gray-700 font-serif">{{user.username}}</td>
+          <td class="px-4 py-3 text-gray-700 font-serif">{{user.email}}</td>
+         
+        </tr>
+       
+
+      </tbody>
+    </table>
+  </div>
+</div> 
+
+    </div>
+   
+  </div>
+  
+  
+  
+  
