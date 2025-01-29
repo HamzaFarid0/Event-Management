@@ -1,9 +1,7 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/authentication/auth.service';
 import { InvitaionService } from 'src/app/services/invitation/invitaion.service';
 import { Firestore ,doc, getDoc, updateDoc } from '@angular/fire/firestore';
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-invitations',
@@ -12,10 +10,12 @@ import { AppState } from 'src/app/store/app.state';
 })
 export class InvitationsComponent implements OnInit{
 
-  invitations: any[]=[]
+  invitations: any[] = [];
+  zeroInvitations = false
+  
   constructor(private _invitationService : InvitaionService,
      private _authService :AuthService,
-    private _firestore : Firestore, private _store: Store<AppState>
+    private _firestore : Firestore
     ){}
 
   ngOnInit() {
@@ -23,6 +23,7 @@ export class InvitationsComponent implements OnInit{
       next: (data) => {
         console.log('Invitations:', data); // Debugging
         this.invitations = data
+        
       },
       error: (err) => {
         console.error('Error:', err);
@@ -32,8 +33,11 @@ export class InvitationsComponent implements OnInit{
     this._authService.currentUser$.subscribe((data)=>{
       console.log('invite current user' ,data)
     })
-  }
 
+    setTimeout(() => {
+       this.zeroInvitations=true
+    }, 2800)
+  }
 
   updateInviteStatus(eventId: string, userId: string, updateStatus: string) {
     const inviteRef = doc(this._firestore, `events/${eventId}/invites/${userId}`);
